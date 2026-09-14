@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if screen == 'dashboard' %}PathVision · Pavement Condition{% else %}StreetLens · Pavement Crack Detection{% endif %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+{% if screen == 'login' %}
+<div id="loginScreen" class="login-page">
+  <div class="login-topbar">
+    <div class="brand-mark">⌁</div><span class="apcd">Street Lens</span><span class="divider"></span>
+    <span class="top-note">Pavement Crack Detection & Road Condition Analysis</span>
+  </div>
+  <main class="login-main">
+    <div class="login-grid">
+      <section class="login-intro">
+        <h1>Automated<br>Pavement<br><span>Condition</span><br>Detector</h1>
+        <p>Deliver intelligent transportation solutions that improve infrastructure decision making while remaining accessible and affordable for all communities.</p>
+        <ul><li>AI-powered crack detection</li><li>Distress severity scoring</li><li>GPS-tagged inspection logs</li></ul>
+        <div class="login-road"><img src="https://images.unsplash.com/photo-1519817914152-22d216bb9170?w=1200&h=300&fit=crop&auto=format" alt="Road inspection view"><div>Collingswood, NJ · Haddon Ave · SouthBound</div></div>
+      </section>
+      <section class="login-card" id="loginCard">
+        <div id="loginFormView">
+          <h2>Sign in</h2><p>Access the pavement inspection dashboard</p>
+          <form action="{{ url_for('dashboard') }}" method="get">
+            <label>Username<input name="username" value="inspector_01" type="text"></label>
+            <label>Password<input name="password" value="••••••••" type="password"></label>
+            <div class="login-options"><label class="remember"><input type="checkbox" checked> Remember me</label><button type="button" class="link-button">Forgot password?</button></div>
+            <button class="login-btn" type="submit">Login</button>
+            <button class="register-btn" type="button" onclick="showRegister()">Register</button>
+          </form>
+          <small>DOT Infrastructure Division · Secure Access Portal</small>
+        </div>
+        <div id="registerView" class="register-view hidden">
+          <div class="register-icon">✓</div><h3>Registration Prototype</h3><p>Registration functionality is reserved for this prototype demo. Contact your DOT administrator to request access.</p><button type="button" onclick="showLogin()">Back to Login</button>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer>© 2026 APCD Platform · v2.4.1</footer>
+</div>
+{% else %}
+<div class="dashboard">
+  <header class="header">
+    <div class="header-brand"><strong>StreetLens</strong><span>·</span><span>Pavement Condition Detector</span></div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="A">A · Route Command</button><button class="tab" data-tab="B">B · Inspection Report</button><button class="tab" data-tab="C">C · Network Overview</button>
+    </nav>
+    <div class="header-controls"><span class="field-label">ROUTE</span><button class="select-box">US-1 · Trenton Corridor <span>⌄</span></button><span class="field-label">MILE POST</span><span class="mile-box">52.1</span><a href="{{ url_for('login') }}" class="signout">Sign out</a></div>
+  </header>
+
+  <main class="dashboard-body">
+    <aside class="left-column">
+      <section class="route-section">
+        <div class="section-title-row"><h2>Route overview</h2><div class="legend"><span><i class="good"></i>Good</span><span><i class="fair"></i>Fair</span><span><i class="poor"></i>Poor</span></div></div>
+        <div class="map-card" onclick="openMap()">
+          <svg viewBox="0 0 300 220" aria-label="Route overview map">
+            <rect width="300" height="220" fill="#121212"/>
+            <g opacity=".35">{% for i in range(7) %}<line x1="{{ i*50 }}" y1="0" x2="{{ i*50 }}" y2="220" stroke="#222"/>{% endfor %}{% for i in range(5) %}<line x1="0" y1="{{ i*55 }}" x2="300" y2="{{ i*55 }}" stroke="#222"/>{% endfor %}</g>
+            <path d="M85 195 C105 155 104 125 88 95 C69 61 98 39 143 34 C191 29 233 45 245 76 C258 109 238 130 240 157 C243 180 258 191 275 201" fill="none" stroke="#353535" stroke-width="15" stroke-linecap="round"/>
+            <path d="M85 195 C105 155 104 125 88 95 C69 61 98 39 143 34" fill="none" stroke="#57a45d" stroke-width="10" stroke-linecap="round"/>
+            <path d="M143 34 C191 29 233 45 245 76" fill="none" stroke="#d4a62f" stroke-width="10" stroke-linecap="round"/>
+            <path d="M245 76 C258 109 238 130 240 157 C243 180 258 191 275 201" fill="none" stroke="#cf573f" stroke-width="10" stroke-linecap="round"/>
+            <circle cx="240" cy="157" r="7" fill="#f0ead5" stroke="#222" stroke-width="2"/>
+            <text x="34" y="35" fill="#444" font-size="9" font-family="monospace">MP 50.0</text><text x="105" y="115" fill="#333" font-size="9" font-family="monospace">MP 51.5</text><text x="162" y="180" fill="#555" font-size="9" font-family="monospace">52.1 ◀</text><text x="160" y="215" fill="#333" font-size="9" font-family="monospace">MP 53.0</text>
+          </svg>
+        </div>
+      </section>
+
+      <section class="ml-card">
+        <div class="ml-head"><h2>ML-detected cracks · sample frames</h2><span>MP 51.8–52.3 · 5 lanes scanned</span></div>
+        <div class="sample-list">
+          <div class="sample"><img src="{{ url_for('static', filename='images/crack-1.png') }}" alt="Transverse crack"><p>Transverse crack · side joint</p></div>
+          <div class="sample"><img src="{{ url_for('static', filename='images/crack-2.png') }}" alt="Alligator cracking"><p>Alligator cracking</p></div>
+          <div class="sample"><img src="{{ url_for('static', filename='images/crack-3.png') }}" alt="Longitudinal crack"><p>Longitudinal crack</p></div>
+        </div>
+        <div class="sample-legend"><span><i style="background:#3b82f6"></i>Alligator crack</span><span><i style="background:#f97316"></i>Longitudinal crack</span><span><i style="background:#eab308"></i>Transverse crack</span><span><i style="background:#a855f7"></i>Pothole</span></div>
+      </section>
+    </aside>
+
+    <section class="right-column">
+      <div class="road-viewer">
+        <img src="https://images.unsplash.com/photo-1519817914152-22d216bb9170?w=1200&h=500&fit=crop&auto=format" alt="Forward-facing road inspection photograph">
+        <div class="distress-badge"><strong>71</strong><span>DISTRESS INDEX</span></div>
+      </div>
+
+      <section class="route-details">
+        <div class="details-header"><strong>Route details</strong><label>Show route details <button id="detailsToggle" class="toggle" type="button" onclick="toggleDetails()"><span></span></button></label></div>
+        <div id="detailsContent" class="details-content hidden">
+          {% for l,v in [('Route','US-1'),('Mile post','52.1'),('Direction','Northbound'),('Captured','09/12/25'),('Coordinate','40.2143°, -74.759°')] %}<div><small>{{ l }}</small><strong>{{ v }}</strong></div>{% endfor %}
+        </div>
+      </section>
+
+      <section class="analytics">
+        <div class="analytics-card breakdown"><h2>Distress breakdown</h2>{% for d in distress %}<div class="distress-row"><div class="distress-line"><span><i style="background:{{ d.color }}"></i>{{ d.label }}</span><b>{{ d.pct }}%</b></div><div class="bar"><span style="width:{{ d.pct }}%;background:{{ d.color }}"></span></div><p>{{ d.sub }}</p></div>{% endfor %}</div>
+        <div class="analytics-card score"><h2>Overall distress score</h2><div class="gauge"><svg viewBox="0 0 220 130"><path d="M35 105 A75 75 0 0 1 185 105" fill="none" stroke="#2a2a2a" stroke-width="14" stroke-linecap="round"/><path d="M35 105 A75 75 0 0 1 185 105" fill="none" stroke="#f97316" stroke-width="14" stroke-linecap="round" stroke-dasharray="136 236"/><text x="110" y="95" text-anchor="middle" fill="#f1f1f1" font-size="36" font-weight="700" font-family="Outfit">29</text><text x="110" y="113" text-anchor="middle" fill="#777" font-size="9" font-family="Inter">scale: 100 = best condition</text></svg></div><div class="condition">CONDITION: POOR</div><div class="pills">{% for p in pills %}<div><span>{{ p.label }}</span><b>{{ p.score }}</b></div>{% endfor %}</div></div>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div id="mapModal" class="modal hidden" onclick="closeMap(event)"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-head"><strong>● Inspection Location — US-1 NorthBound</strong><button onclick="closeMap()">×</button></div><div class="modal-map"><svg viewBox="0 0 640 380"><rect width="640" height="380" fill="#1a2744"/><rect x="302" width="36" height="380" fill="#2d4a6e"/><rect x="318" width="4" height="380" fill="#f1f5f9" opacity=".15"/><rect y="172" width="640" height="30" fill="#253d5a"/><circle cx="320" cy="190" r="9" fill="#84cc16"/></svg></div><div class="modal-foot">● Inspection Point <span>Coords: 176.98°N, 169.99°W</span></div></div></div>
+{% endif %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body></html>
